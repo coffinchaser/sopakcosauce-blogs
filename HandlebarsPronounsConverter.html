@@ -1,395 +1,627 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pronoun to Handlebars Converter</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f8f9fa;
-            padding: 2rem;
-            line-height: 1.6;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        
-        body.dark {
-            background: #1a1a18;
-            color: #e9e9e9;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            position: relative;
-        }
-        
-        .dark-mode-toggle {
-            position: absolute;
-            top: -1rem;
-            right: 0;
-            background: none;
-            border: 2px solid #007bff;
-            color: #007bff;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-        
-        .dark-mode-toggle:hover {
-            background: #007bff;
-            color: white;
-        }
-        
-        body.dark .dark-mode-toggle {
-            border-color: #ee6e2b;
-            color: #ee6e2b;
-        }
-        
-        body.dark .dark-mode-toggle:hover {
-            background: #ee6e2b;
-            color: #1a1a18;
-        }
-        
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-top: 3rem;
-            margin-bottom: 2rem;
-            font-weight: 600;
-            transition: color 0.3s;
-        }
-        
-        body.dark h1 {
-            color: #ee6e2b;
-        }
-        
-        .converter {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-        
-        .input-section, .output-section {
-            background: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: background-color 0.3s, box-shadow 0.3s;
-        }
-        
-        body.dark .input-section,
-        body.dark .output-section {
-            background: #2a2a28;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        }
-        
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .section-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #555;
-            transition: color 0.3s;
-        }
-        
-        body.dark .section-title {
-            color: #ee6e2b;
-        }
-        
-        .btn {
-            background: #007bff;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: background-color 0.2s;
-        }
-        
-        .btn:hover {
-            background: #0056b3;
-        }
-        
-        .btn:active {
-            transform: translateY(1px);
-        }
-        
-        textarea {
-            width: 100%;
-            height: 300px;
-            border: 2px solid #e9ecef;
-            border-radius: 4px;
-            padding: 1rem;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            resize: vertical;
-            outline: none;
-            transition: border-color 0.2s, background-color 0.3s, color 0.3s;
-            background: white;
-            color: #333;
-        }
-        
-        textarea:focus {
-            border-color: #007bff;
-        }
-        
-        body.dark textarea {
-            background: #1a1a18;
-            color: #e9e9e9;
-            border-color: #444;
-        }
-        
-        body.dark textarea:focus {
-            border-color: #ee6e2b;
-        }
-        
-        #output {
-            background-color: #f8f9fa;
-            color: #333;
-        }
-        
-        body.dark #output {
-            background-color: #2a2a28;
-            color: #e9e9e9;
-        }
-        
-        .status {
-            text-align: center;
-            margin-top: 1rem;
-            padding: 0.5rem;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        
-        .status.show {
-            opacity: 1;
-        }
-        
-        .status.success {
-            background: #d4edda;
-            color: #155724;
-        }
-        
-        .status.error {
-            background: #f8d7da;
-            color: #721c24;
-        }
-        
-        @media (max-width: 768px) {
-            .converter {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-            
-            body {
-                padding: 1rem;
-            }
-            
-            textarea {
-                height: 200px;
-            }
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Handlebars Pronouns Converter</title>
+<style>
+  :root {
+    --bg: #0b0d10;
+    --fg: #e7e9ee;
+    --sub: #aeb6c2;
+    --muted: #7d8696;
+    --card: #11141a;
+    --accent: #4ea1ff;
+    --border: #1c2230;
+    --success: #22c55e;
+    --warning: #f59e0b;
+    --error: #ef4444;
+    --hover: #1e2532;
+  }
+  
+  * { box-sizing: border-box; }
+  
+  html, body { height: 100%; }
+  
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font: 14px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji","Segoe UI Emoji";
+  }
+  
+  .wrap { 
+    max-width: 1200px; 
+    margin: 0 auto; 
+    padding: 24px 16px; 
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  
+  h1 { 
+    margin: 0 0 8px 0; 
+    font-size: 28px; 
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--fg), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .subtitle {
+    color: var(--sub);
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+  
+  .main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .row { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 24px; 
+    flex: 1;
+    min-height: 500px;
+  }
+  
+  .col { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 12px; 
+  }
+  
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0;
+    overflow: hidden;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.2s ease;
+  }
+  
+  .card:hover {
+    border-color: var(--accent);
+  }
+  
+  .card:has(textarea:focus) {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(78, 161, 255, 0.1);
+  }
+  
+  textarea {
+    width: 100%;
+    flex: 1;
+    background: transparent;
+    color: var(--fg);
+    border: none;
+    outline: none;
+    resize: none;
+    font: 13px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    padding: 20px;
+    min-height: 400px;
+  }
+  
+  textarea::placeholder {
+    color: var(--muted);
+  }
+  
+  .toolbar { 
+    display: flex; 
+    gap: 8px; 
+    align-items: center; 
+    padding: 16px 20px;
+    background: rgba(28, 34, 48, 0.5);
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .toolbar-title {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--fg);
+  }
+  
+  .toolbar .spacer { flex: 1; }
+  
+  button {
+    background: var(--card);
+    color: var(--fg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  button:hover { 
+    background: var(--hover);
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+  
+  button:active {
+    transform: translateY(0);
+  }
+  
+  .btn-primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background: #3d8bfd;
+    border-color: #3d8bfd;
+  }
+  
+  .hint { 
+    color: var(--muted); 
+    font-size: 12px; 
+    padding: 0 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .pill {
+    display: inline-block;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 12px;
+    color: var(--sub);
+    background: rgba(78, 161, 255, 0.1);
+    border-color: rgba(78, 161, 255, 0.3);
+  }
+  
+  .status {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 1000;
+    transform: translateX(400px);
+    transition: transform 0.3s ease;
+    max-width: 300px;
+  }
+  
+  .status.show {
+    transform: translateX(0);
+  }
+  
+  .status.success {
+    background: var(--success);
+    color: white;
+  }
+  
+  .status.error {
+    background: var(--error);
+    color: white;
+  }
+  
+  .examples {
+    margin-top: 24px;
+    padding: 20px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  
+  .examples h3 {
+    margin: 0 0 12px 0;
+    color: var(--accent);
+    font-size: 16px;
+  }
+  
+  .example-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  
+  .example {
+    padding: 12px;
+    background: rgba(28, 34, 48, 0.5);
+    border-radius: 8px;
+    font-family: ui-monospace, monospace;
+    font-size: 12px;
+  }
+  
+  .example-label {
+    color: var(--sub);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  
+  .word-count {
+    font-size: 11px;
+    color: var(--muted);
+  }
+  
+  .wyvern-link {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+  
+  .wyvern-link:hover {
+    color: #6bb6ff;
+    text-decoration: underline;
+  }
+  
+  .compatibility-notice {
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-top: 16px;
+    font-size: 14px;
+    color: #fbbf24;
+  }
+  
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .footer-links a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+  
+  .footer-links a:hover {
+    color: #6bb6ff;
+    text-decoration: underline;
+  }
+  
+  .license {
+    font-size: 11px;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.4;
+  }
+  
+  .license a {
+    color: var(--sub);
+    text-decoration: none;
+  }
+  
+  .license a:hover {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+  
+  .license img {
+    height: 16px !important;
+    margin-left: 2px;
+    vertical-align: text-bottom;
+  }
+  
+  @media (max-width: 900px) {
+    .row { 
+      grid-template-columns: 1fr; 
+      gap: 16px;
+    }
+    
+    .example-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .wrap {
+      padding: 16px 12px;
+    }
+    
+    h1 {
+      font-size: 24px;
+    }
+    
+    .compatibility-notice {
+      display: none;
+    }
+    
+    .footer-links {
+      flex-direction: column;
+      gap: 12px;
+      text-align: center;
+    }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <button class="dark-mode-toggle" id="darkModeToggle">🌙 Dark Mode</button>
-        <h1>Pronoun to Handlebars Converter</h1>
-        
-        <div class="converter">
-            <div class="input-section">
-                <div class="section-header">
-                    <div class="section-title">Input Text</div>
-                    <button class="btn" id="pasteBtn">📋 Paste</button>
-                </div>
-                <textarea 
-                    id="input" 
-                    placeholder="Enter your text with pronouns here...&#10;&#10;Example:&#10;They opened their laptop and began working on their project. When they finished, they felt proud of themselves."
-                ></textarea>
-            </div>
-            
-            <div class="output-section">
-                <div class="section-header">
-                    <div class="section-title">Converted Text</div>
-                    <button class="btn" id="copyBtn">📄 Copy</button>
-                </div>
-                <textarea 
-                    id="output" 
-                    readonly
-                    placeholder="Converted text with Handlebars macros will appear here..."
-                ></textarea>
-            </div>
-        </div>
-        
-        <div class="status" id="status"></div>
+  <div class="wrap">
+    <div class="header">
+      <h1>Handlebars Pronouns Converter</h1>
+      <div class="subtitle">
+        Smart pronoun-to-macro conversion for <a href="https://app.wyvern.chat/" target="_blank" rel="noopener" class="wyvern-link">WyvernChat</a> templates
+        <span class="pill">tilde-scoped</span>
+      </div>
+      <div class="compatibility-notice">
+        ⚠️ <strong>WyvernChat Exclusive:</strong> This converter generates macros specifically for WyvernChat's templating system. Not compatible with other frontends.
+      </div>
     </div>
 
-    <script>
-        const input = document.getElementById('input');
-        const output = document.getElementById('output');
-        const pasteBtn = document.getElementById('pasteBtn');
-        const copyBtn = document.getElementById('copyBtn');
-        const status = document.getElementById('status');
-        const darkModeToggle = document.getElementById('darkModeToggle');
+    <div class="main-content">
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <div class="toolbar">
+              <div class="toolbar-title">📝 Input Text</div>
+              <div class="spacer"></div>
+              <div class="word-count" id="inputCount">0 words</div>
+              <button id="btnPaste">📋 Paste</button>
+              <button id="btnClearIn">🗑️ Clear</button>
+            </div>
+            <textarea id="input" placeholder="Type or paste your text here...
 
-        // Dark mode functionality
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark');
-            const isDark = document.body.classList.contains('dark');
-            darkModeToggle.textContent = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
-            localStorage.setItem('darkMode', isDark);
-        }
+Examples:
+~They walked to ~their car.
+~He said ~his book was ready.
+~She gave ~her presentation.
 
-        // Initialize dark mode from localStorage
-        const savedDarkMode = localStorage.getItem('darkMode') === 'true';
-        if (savedDarkMode) {
-            document.body.classList.add('dark');
-            darkModeToggle.textContent = '☀️ Light Mode';
-        }
+Tip: Only words with ~ prefix are converted!"></textarea>
+          </div>
+          <div class="hint">
+            💡 Only words prefixed with a tilde (~) are converted to macros
+          </div>
+        </div>
 
-        darkModeToggle.addEventListener('click', toggleDarkMode);
+        <div class="col">
+          <div class="card">
+            <div class="toolbar">
+              <div class="toolbar-title">⚡ Converted Output</div>
+              <div class="spacer"></div>
+              <div class="word-count" id="outputCount">0 words</div>
+              <button id="btnCopy" class="btn-primary">📄 Copy</button>
+              <button id="btnClearOut">🗑️ Clear</button>
+            </div>
+            <textarea id="output" readonly placeholder="Converted Handlebars macros will appear here automatically..."></textarea>
+          </div>
+          <div class="hint">
+            ✨ Existing {{macros}} remain untouched • Smart context detection for ambiguous pronouns
+          </div>
+        </div>
+      </div>
 
-        function showStatus(message, type = 'success') {
-            status.textContent = message;
-            status.className = `status show ${type}`;
-            setTimeout(() => {
-                status.classList.remove('show');
-            }, 2000);
-        }
+      <div class="examples">
+        <h3>💡 Examples & Usage Guide</h3>
+        <div class="example-grid">
+          <div class="example">
+            <div class="example-label">Input</div>
+            <div>~They opened ~their laptop and started working on ~their project.</div>
+          </div>
+          <div class="example">
+            <div class="example-label">Output</div>
+            <div>{{pronounSubjectiveCap}} opened {{pronounPosDet}} laptop and started working on {{pronounPosDet}} project.</div>
+          </div>
+          <div class="example">
+            <div class="example-label">Ambiguous Resolution</div>
+            <div>~Her book → {{pronounPosDet}} book<br>Talk to ~her → Talk to {{pronounObjective}}</div>
+          </div>
+          <div class="example">
+            <div class="example-label">Contractions</div>
+            <div>~They're happy → {{pronounSubjective}}'re happy<br>~He's ready → {{pronounSubjective}}'s ready</div>
+          </div>
+        </div>
+        <div style="margin-top: 16px; padding: 12px; background: rgba(78, 161, 255, 0.1); border-radius: 8px; font-size: 13px;">
+          <strong>📚 Need help with WyvernChat templates?</strong> Check out the <a href="https://sopakcosauce.gitbook.io/sopakcosauce-docs" target="_blank" rel="noopener" class="wyvern-link">comprehensive documentation</a> for detailed guides and examples.
+        </div>
+      </div>
+    </div>
 
-        function convertPronouns(text) {
-            if (!text.trim()) return '';
-            
-            // Create a map of pronoun replacements
-            const pronounMap = {
-                // Subjective pronouns
-                'they': '{{pronounSubjective}}',
-                'They': '{{pronounSubjectiveCap}}',
-                'he': '{{pronounSubjective}}',
-                'He': '{{pronounSubjectiveCap}}',
-                'she': '{{pronounSubjective}}',
-                'She': '{{pronounSubjectiveCap}}',
-                'it': '{{pronounSubjective}}',
-                'It': '{{pronounSubjectiveCap}}',
-                
-                // Objective pronouns
-                'them': '{{pronounObjective}}',
-                'Them': '{{pronounObjectiveCap}}',
-                'him': '{{pronounObjective}}',
-                'Him': '{{pronounObjectiveCap}}',
-                'her': '{{pronounObjective}}',
-                'Her': '{{pronounObjectiveCap}}',
-                
-                // Possessive determiners
-                'their': '{{pronounPosDet}}',
-                'Their': '{{pronounPosDetCap}}',
-                'his': '{{pronounPosDet}}',
-                'His': '{{pronounPosDetCap}}',
-                'its': '{{pronounPosDet}}',
-                'Its': '{{pronounPosDetCap}}',
-                
-                // Possessive pronouns
-                'theirs': '{{pronounPosPro}}',
-                'Theirs': '{{pronounPosProCap}}',
-                'hers': '{{pronounPosPro}}',
-                'Hers': '{{pronounPosProCap}}',
-                
-                // Reflexive pronouns
-                'themselves': '{{pronounReflexive}}',
-                'Themselves': '{{pronounReflexiveCap}}',
-                'himself': '{{pronounReflexive}}',
-                'Himself': '{{pronounReflexiveCap}}',
-                'herself': '{{pronounReflexive}}',
-                'Herself': '{{pronounReflexiveCap}}',
-                'itself': '{{pronounReflexive}}',
-                'Itself': '{{pronounReflexiveCap}}'
-            };
+    <div class="footer">
+      <div class="footer-links">
+        <a href="https://app.wyvern.chat/" target="_blank" rel="noopener">🐉 WyvernChat</a>
+        <a href="https://sopakcosauce.gitbook.io/sopakcosauce-docs" target="_blank" rel="noopener">📚 Documentation</a>
+        <a href="https://app.wyvern.chat/profiles/soup" target="_blank" rel="noopener">👤 Creator Profile</a>
+      </div>
+      
+      <div class="license">
+        <p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/">
+          Handlebars Pronouns Converter by 
+          <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="https://beta.wyvern.chat/profiles/dTSo5SSdNrgwrhGxqVqDW5an9ij2">SopakcoSauce</a> is licensed under 
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">
+            Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
+            <img style="height:16px!important;margin-left:2px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt="">
+            <img style="height:16px!important;margin-left:2px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt="">
+            <img style="height:16px!important;margin-left:2px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1" alt="">
+            <img style="height:16px!important;margin-left:2px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt="">
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
 
-            let result = text;
-            
-            // Handle contractions first
-            result = result.replace(/\b(they|he|she|it)'re\b/gi, (match, pronoun) => {
-                const replacement = pronounMap[pronoun] || pronounMap[pronoun.toLowerCase()];
-                return replacement ? `${replacement}'re` : match;
-            });
-            
-            result = result.replace(/\b(they|he|she|it)'s\b/gi, (match, pronoun) => {
-                const replacement = pronounMap[pronoun] || pronounMap[pronoun.toLowerCase()];
-                return replacement ? `${replacement}'s` : match;
-            });
-            
-            // Replace regular pronouns (use word boundaries to avoid partial matches)
-            for (const [pronoun, replacement] of Object.entries(pronounMap)) {
-                const regex = new RegExp(`\\b${pronoun}\\b`, 'g');
-                result = result.replace(regex, replacement);
-            }
-            
-            // Handle special case for "her" as possessive determiner vs objective
-            // This is a simplified approach - in a real implementation you might need more context
-            result = result.replace(/\{\{pronounObjective\}\}\s+([a-zA-Z]+)/g, (match, nextWord) => {
-                // Common words that follow possessive determiners
-                const possessiveIndicators = ['book', 'car', 'house', 'job', 'name', 'phone', 'computer', 'idea', 'work', 'project', 'family', 'friend', 'dog', 'cat'];
-                if (possessiveIndicators.some(word => nextWord.toLowerCase().includes(word.toLowerCase()))) {
-                    return `{{pronounPosDet}} ${nextWord}`;
-                }
-                return match;
-            });
-            
-            return result;
-        }
+  <div class="status" id="status"></div>
 
-        // Auto-convert on input
-        input.addEventListener('input', () => {
-            output.value = convertPronouns(input.value);
-        });
+<script>
+/* ========= tiny helpers ========= */
+const LOWER = s => s.toLowerCase()
+const IS_CAP = s => /^[A-Z]/.test(s)
+const WORD = /^[A-Za-z][A-Za-z'-]*$/
 
-        // Paste button functionality
-        pasteBtn.addEventListener('click', async () => {
-            try {
-                const text = await navigator.clipboard.readText();
-                input.value = text;
-                output.value = convertPronouns(text);
-                showStatus('Text pasted successfully!');
-            } catch (err) {
-                showStatus('Failed to paste. Please paste manually.', 'error');
-            }
-        });
+/* quick lists */
+const DETS = new Set(['a','an','the','this','that','these','those','my','your','our','his','her','its','their'])
+const COMMON_ADJ = new Set(['new','old','other','own','first','last','great','small','big','entire','whole','unbelievably'])
+const NOUN_SFX = ['ment','tion','ness','ship','ity','age','ance','ence','ing','er','or']
 
-        // Copy button functionality
-        copyBtn.addEventListener('click', async () => {
-            try {
-                await navigator.clipboard.writeText(output.value);
-                showStatus('Converted text copied to clipboard!');
-            } catch (err) {
-                // Fallback for older browsers
-                output.select();
-                document.execCommand('copy');
-                showStatus('Converted text copied to clipboard!');
-            }
-        });
+const looksLikeNoun = w => {
+  const lw = LOWER(w)
+  if (DETS.has(lw) || COMMON_ADJ.has(lw)) return false
+  if (NOUN_SFX.some(sfx => lw.endsWith(sfx))) return true
+  return lw.length > 3 && lw.endsWith('s')
+}
 
-        // Initial focus
-        input.focus();
-    </script>
+/* tokenise while preserving macros */
+function toks(src){
+  const a=[]
+  let i=0
+  while(i<src.length){
+    if(src[i]==='{'){
+      const j = src.indexOf('}}',i)+2||src.length
+      a.push({t:src.slice(i,j),m:1})
+      i=j;continue}
+    const w=src.slice(i).match(/^[A-Za-z'-]+/)
+    if(w){a.push({t:w[0]});i+=w[0].length;continue}
+    a.push({t:src[i]});i++}
+  return a
+}
+const merge=t=>t.map(o=>o.t).join('')
+
+/* emit helpers */
+const H=(base,cap)=>'{{'+base+(cap?'Cap':'')+'}}'
+
+/* direct mapping */
+function direct(w,cap){
+  switch(w){
+    case'he':case'she':case'it':case'they':case'you':return H('pronounSubjective',cap)
+    case'him':case'them':return H('pronounObjective',cap)
+    case'his':return null          // ambiguous
+    case'her':return null          // ambiguous
+    case'their':case'your':case'its':return H('pronounPosDet',cap)
+    case'theirs':case'yours':return H('pronounPosPro',cap)
+    case'themselves':case'themself':case'himself':case'herself':case'itself':case'yourself':case'yourselves':
+      return H('pronounReflexive',cap)
+    default:return null}
+}
+
+/* contraction replace on tilde token body (no leading ~) */
+function contraction(body,cap){
+  const m=body.match(/^([A-Za-z]+)('?)(re|ve|d|ll|s)$/)
+  if(!m)return null
+  const p=LOWER(m[1])
+  if(!['they','he','she','it','you'].includes(p))return null
+  return H('pronounSubjective',cap)+(m[2]||'\'')+m[3]
+}
+
+/* her/his heuristics */
+function resolve(tokens,i,kind){
+  const cap=IS_CAP(tokens[i].base)
+  let j=i+1,steps=0
+  while(j<tokens.length&&steps<6){
+    const tt=tokens[j].t;if(tokens[j].m){break}
+    if(/^[\s.,!?;:"'`()\[\]-]+$/.test(tt)){j++;steps++;continue}
+    if(!WORD.test(tt)){j++;steps++;continue}
+    const lw=LOWER(tt)
+    if(looksLikeNoun(tt))return H(kind==='her'?'pronounPosDet':'pronounPosDet',cap)
+    return H(kind==='her'?'pronounObjective':'pronounPosPro',cap)}
+  return H(kind==='her'?'pronounObjective':'pronounPosPro',cap)
+}
+
+/* main */
+function convert(text){
+  const tk=toks(text)
+  tk.forEach((o,i)=>{
+    if(o.m)return                   // macro guard
+    if(!o.t.startsWith('~'))return  // no tilde, leave literal
+    o.base=o.t.slice(1)             // save for heuristics
+    const cap=IS_CAP(o.base)
+    /* contraction first */
+    const c=contraction(o.base,cap)
+    if(c){o.t=c;return}
+    /* direct */
+    const d=direct(LOWER(o.base),cap)
+    if(d){o.t=d;return}
+    /* her / his branch */
+    if(LOWER(o.base)==='her'){o.t=resolve(tk,i,'her');return}
+    if(LOWER(o.base)==='his'){o.t=resolve(tk,i,'his');return}
+    /* otherwise leave tilde off */
+    o.t=o.base
+  })
+  return merge(tk)
+}
+
+/* UI helpers */
+function countWords(text) {
+  return text.trim() ? text.trim().split(/\s+/).length : 0
+}
+
+function showStatus(message, type = 'success') {
+  const status = document.getElementById('status')
+  status.textContent = message
+  status.className = `status ${type}`
+  status.classList.add('show')
+  setTimeout(() => status.classList.remove('show'), 3000)
+}
+
+function updateWordCounts() {
+  const inputText = $i.value
+  const outputText = $o.value
+  document.getElementById('inputCount').textContent = `${countWords(inputText)} words`
+  document.getElementById('outputCount').textContent = `${countWords(outputText)} words`
+}
+
+/* UI glue */
+const $i = document.getElementById('input')
+const $o = document.getElementById('output')
+const run = () => {
+  $o.value = convert($i.value)
+  updateWordCounts()
+}
+
+$i.addEventListener('input', run)
+
+document.getElementById('btnPaste').onclick = async () => {
+  try {
+    const text = await navigator.clipboard.readText()
+    $i.value = text
+    run()
+    showStatus('Text pasted successfully!', 'success')
+  } catch (err) {
+    showStatus('Failed to paste. Please paste manually.', 'error')
+  }
+}
+
+document.getElementById('btnCopy').onclick = async () => {
+  try {
+    await navigator.clipboard.writeText($o.value)
+    showStatus('Converted text copied to clipboard!', 'success')
+  } catch (err) {
+    showStatus('Failed to copy. Please copy manually.', 'error')
+  }
+}
+
+document.getElementById('btnClearIn').onclick = () => {
+  $i.value = ''
+  run()
+  showStatus('Input cleared', 'success')
+}
+
+document.getElementById('btnClearOut').onclick = () => {
+  $o.value = ''
+  updateWordCounts()
+  showStatus('Output cleared', 'success')
+}
+
+// Initialize
+run()
+</script>
 </body>
 </html>
