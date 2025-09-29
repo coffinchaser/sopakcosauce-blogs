@@ -6,7 +6,7 @@ export default function Home() {
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-[var(--fg)] to-[var(--accent)] bg-clip-text text-transparent">
-            sopakcosauce-blogs
+            SopakcoSauce Blogs
           </h1>
           <p className="text-[var(--sub)] text-lg">
             Welcome to the looney bin.
